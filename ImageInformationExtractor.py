@@ -6,24 +6,25 @@ import csv
 
 def main():
     
-    file_path_new = 'herbarium_photo_associations'
+    file_path_new = 'D:/Thesis/realism_data/Ukiyo-e'
     # Gather the list of all image files
     img_files = []
-    for subfolder in os.listdir(file_path_new):
-        subfolder_path = os.path.join(file_path_new, subfolder)
-        if os.path.isdir(subfolder_path):
-            for file in os.listdir(subfolder_path):
-                if file.endswith(".jpg"):
-                    img_files.append(os.path.join(subfolder_path, file))
+    for file in os.listdir(file_path_new):
+        if file.endswith(".jpg"):
+            img_files.append(os.path.join(file_path_new,file))
         else:
-            print(f"{subfolder_path}| is not a directory")
+            print(f"{os.path.join(file_path_new,file)} is not a directory")
     print(f"Found {len(img_files)} image files")
 
     # Process image files assigned to this process
-    csv_filename = "HerbariumPhotoAssociationsImageInformation.csv"
+    csv_filename = "Ukiyo-e.csv"
     image_data = []
     i = 1
-    print(img_files)
+    for f in img_files:
+        try:
+            print(f)
+        except UnicodeEncodeError:
+            print(f.encode('utf-8', errors='replace'))
     for file in img_files:
         print(f"Processing file {i} of {len(img_files)}")
         i += 1
@@ -37,10 +38,10 @@ def main():
         except Exception as e:
             print(f"Error processing file {file}: {e}")
     csv_headers = ["Filename", "Width", "Height","DPI Information"]
-    with open(csv_filename,mode = "w",newline = "") as file:
+    with open(csv_filename, mode="w", newline="", encoding="utf-8") as file:
         writer = csv.writer(file)
         writer.writerow(csv_headers)
-        writer.writerows(image_data)     
+        writer.writerows(image_data)  
     
 if __name__ == "__main__":
     main()
